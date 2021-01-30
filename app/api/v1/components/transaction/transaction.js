@@ -1,4 +1,3 @@
-const { fileURLToPath } = require("url");
 const Transaction = require("./model");
 
 const create = async (body) => {

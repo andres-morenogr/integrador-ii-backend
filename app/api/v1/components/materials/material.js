@@ -1,23 +1,40 @@
-const Transaction = require("../transaction/model");
+const Material = require("./model");
 
-const getAllTransactionsOnMaterialType = async (filters) => {
-  console.log(filters);
-  const { projectId, typeOfMaterial } = filters;
-  return await Transaction.aggregate([
-    { $match: { $and: [{ type: "Material" }, { projectId: projectId }] } },
-    { $unwind: '$products' },
-    { $match: { 'products.description': typeOfMaterial } }
-  ])
+const create = async (body) => {
+  console.log(body);
+  const material = new Material({
+    id: body.id,
+    projectId: body.projectId,
+    description: body.description,
+    type: body.type,
+    amount: body.amount,
+  });
+  return await material.save();
 }
 
-const getAllMaterialTransactions = async (filters) => {
-  const { projectId } = filters;
-  return await Transaction.aggregate([
-    { $match: { $and: [{ type: "Material" }, { projectId: projectId }] } }
-  ])
+const get = async (filters) => {
+  console.log(filters);
+  return await Material.find({ ...filters })
+    .sort({ creationDate: -1 })
+}
+
+const update = async (id, body) => {
+  const material = {
+    projectId: body.projectId,
+    description: body.description,
+    type: body.type,
+    amount: body.amount,
+  };
+  return await Material.findByIdAndUpdate(id, material).exec();
+}
+
+const deleteById = async (id) => {
+  return await Material.findByIdAndRemove(id).exec();
 }
 
 module.exports = {
-  getAllTransactionsOnMaterialType,
-  getAllMaterialTransactions
+  create,
+  get,
+  update,
+  deleteById
 }

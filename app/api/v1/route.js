@@ -16,6 +16,6 @@ router.use('/auth/login', login);
 router.use('/auth/signup', signup);
 router.use('/transactions', validateToken, transactions);
 router.use('/projects', validateToken, projects);
-router.use('/materials', validateToken, materials);
+router.use('/materials', materials);
 
 module.exports = router;

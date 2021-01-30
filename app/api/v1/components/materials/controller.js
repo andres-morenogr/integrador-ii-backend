@@ -1,10 +1,9 @@
 const httpStatus = require('http-status');
 const util = require('./material');
 
-const getByTypeOfMaterial = async (req, res) => {
+const get = async (req, res) => {
   try {
-    const filters = { typeOfMaterial: req.params.typeOfMaterial, projectId: req.query.projectId };
-    const ans = await util.getAllTransactionsOnMaterialType(filters);
+    const ans = await util.get(req.query);
 
     return res
       .status(httpStatus.OK)
@@ -17,9 +16,39 @@ const getByTypeOfMaterial = async (req, res) => {
   }
 };
 
-const getAllMaterialTransactions = async (req, res) => {
+const update = async (req, res) => {
   try {
-    const ans = await util.getAllMaterialTransactions(req.query);
+    const ans = await util.update(req.params.id ,req.body);
+
+    return res
+      .status(httpStatus.OK)
+      .send(ans);
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .send({ message: 'Internal server error' });
+  }
+};
+
+const deleteById = async (req, res) => {
+  try {
+    const ans = await util.deleteById(req.params.id);
+
+    return res
+      .status(httpStatus.OK)
+      .send(ans);
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .send({ message: 'Internal server error' });
+  }
+};
+
+const create = async (req, res) => {
+  try {
+    const ans = await util.create(req.body);
 
     return res
       .status(httpStatus.OK)
@@ -33,6 +62,8 @@ const getAllMaterialTransactions = async (req, res) => {
 };
 
 module.exports = {
-  getByTypeOfMaterial,
-  getAllMaterialTransactions,
+  get,
+  create,
+  update,
+  deleteById
 };
