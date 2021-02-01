@@ -22,7 +22,7 @@ const get = async (filters) => {
 }
 
 const update = async (id, body) => {
-  const transaction = new Transaction({
+  const transaction = {
     projectId: body.projectId,
     description: body.description,
     income: body.income,
@@ -30,8 +30,17 @@ const update = async (id, body) => {
     value: body.value,
     walletId: body.walletId,
     products: body.products
+  };
+  return await Transaction.findByIdAndUpdate(id, deleteEmptyFields(transaction)).exec();
+}
+
+const deleteEmptyFields = (object) => {
+  Object.keys(object).forEach(field => {
+    if (object[field] === null || object[field] === undefined) {
+      delete object[field]
+    }
   });
-  return await Transaction.findByIdAndUpdate(id, transaction, {new:true}).exec();
+  return object;
 }
 
 const deleteById = async (id) => {

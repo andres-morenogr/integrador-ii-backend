@@ -18,7 +18,7 @@ const get = async (req, res) => {
 
 const update = async (req, res) => {
   try {
-    const ans = await util.update(req.body.id ,req.body);
+    const ans = await util.update(req.params.id ,req.body);
 
     return res
       .status(httpStatus.OK)
